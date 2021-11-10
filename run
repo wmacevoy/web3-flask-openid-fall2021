@@ -1,0 +1,18 @@
+#!/bin/bash
+
+eval "$(conda shell.bash hook)"
+
+if [ ! -d ./env ]
+then
+    conda create -p ./env python=3.9 sqlite
+    conda activate ./env
+    pip install -r requirements.txt
+fi
+
+conda activate ./env
+
+export GOOGLE_CLIENT_ID=$(cat ../web3-flask-openid-fall2021-private/google_client_id.txt)
+export GOOGLE_CLIENT_SECRET=$(cat ../web3-flask-openid-fall2021-private/google_client_secret.txt)
+
+python ./app.py
+
