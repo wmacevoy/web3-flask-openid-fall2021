@@ -54,11 +54,11 @@ def load_user(user_id):
 def index():
     if current_user.is_authenticated:
         return (
-            "<p>Hello, {}! You're logged in! Email: {}</p>"
+            "<p>Hello, {}! You're logged in as {}! Email: {}</p>"
             "<div><p>Google Profile Picture:</p>"
             '<img src="{}" alt="Google profile pic"></img></div>'
             '<a class="button" href="/logout">Logout</a>'.format(
-                current_user.name, current_user.email, current_user.profile_pic
+                current_user.name, current_user.role, current_user.email, current_user.profile_pic
             )
         )
     else:
@@ -129,13 +129,15 @@ def callback():
     # Create a user in your db with the information provided
     # by Google
     user = User(
-        id_=unique_id, name=users_name, email=users_email, profile_pic=picture
+        id_=unique_id, name=users_name, email=users_email, profile_pic=picture, role=User.DEFAULT_ROLE
     )
 
     # Doesn't exist? Add it to the database.
-    if not User.get(unique_id):
-        User.create(unique_id, users_name, users_email, picture)
-
+    dbUser = User.get(unique_id)
+    if not dbUser:
+        User.create(user.id, user.name, user.email, user.profile_pic, user.role)
+    else:
+        user=dbUser
     # Begin user session by logging the user in
     login_user(user)
 
