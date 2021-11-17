@@ -7,7 +7,7 @@ from flask import current_app, g
 from flask.cli import with_appcontext
 
 def get_db():
-    DATABASE_URL = os.environ.get(‘DATABASE_URL’)
+    DATABASE_URL = os.environ.get('DATABASE_URL')
     g.db = psycopg2.connect(DATABASE_URL)
 
     return g.db
