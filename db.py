@@ -1,16 +1,14 @@
 # http://flask.pocoo.org/docs/1.0/tutorial/database/
-import sqlite3
+import psycopg2
+import os
 
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
 
 def get_db():
-    if "db" not in g:
-        g.db = sqlite3.connect(
-            "sqlite_db", detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
+    DATABASE_URL = os.environ.get(‘DATABASE_URL’)
+    g.db = psycopg2.connect(DATABASE_URL)
 
     return g.db
 
@@ -20,11 +18,19 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
+CREATE_USERTABLE=f"""
+CREATE TABLE IF NOT EXISTS usertable (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  profile_pic TEXT NOT NULL,
+  role TEXT
+);
+"""
+
 def init_db():
     db = get_db()
-
-    with current_app.open_resource("schema.sql") as f:
-        db.executescript(f.read().decode("utf8"))
+    db.executescript(CREATE_USERTABLE)
 
 @click.command("init-db")
 @with_appcontext
