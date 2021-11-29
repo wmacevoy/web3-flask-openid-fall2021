@@ -87,7 +87,7 @@ def login():
     # scopes that let you retrieve user's profile from Google
     request_uri = client.prepare_request_uri(
         authorization_endpoint,
-        redirect_uri=https_base_url + "/callback",
+        redirect_uri=request.base_url + "/callback",
         scope=["openid", "email", "profile"],
     )
     app.logger.info('login redirect: %s', request_uri)
