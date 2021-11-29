@@ -80,6 +80,7 @@ def login():
         redirect_uri=request.base_url + "/callback",
         scope=["openid", "email", "profile"],
     )
+    app.logger.info('login redirect: %s', request_uri)
     return redirect(request_uri)
 
 @app.route("/login/callback")
@@ -151,5 +152,5 @@ def logout():
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
-#    app.run(ssl_context="adhoc")
-    app.run()
+    app.run(ssl_context="adhoc")
+#    app.run()
