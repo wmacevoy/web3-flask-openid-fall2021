@@ -18,7 +18,8 @@ class User(UserMixin):
         cursor = db.cursor()
         user = cursor.execute(
             "SELECT * FROM usertable WHERE id = %s", (user_id,)
-        ).fetchone()
+        )
+        user=cursor.fetchone()
         cursor.close()
         if not user:
             return None
