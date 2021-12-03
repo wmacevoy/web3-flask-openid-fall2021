@@ -33,7 +33,7 @@ class User(UserMixin):
     def create(id_, name, email, profile_pic, role):
         db = get_db()
         cursor=db.cursor()
-        ConnectionRefusedError.execute(
+        cursor.execute(
             "INSERT INTO usertable (id, name, email, profile_pic, role) "
             "VALUES (%s, %s, %s, %s, %s)",
             (id_, name, email, profile_pic, role),
