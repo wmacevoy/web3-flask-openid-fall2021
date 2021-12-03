@@ -32,9 +32,11 @@ class User(UserMixin):
     @staticmethod
     def create(id_, name, email, profile_pic, role):
         db = get_db()
-        db.execute(
-            "INSERT INTO user (id, name, email, profile_pic, role) "
-            "VALUES (?, ?, ?, ?, ?)",
+        cursor=db.cursor()
+        ConnectionRefusedError.execute(
+            "INSERT INTO usertable (id, name, email, profile_pic, role) "
+            "VALUES (%s, %s, %s, %s, %s)",
             (id_, name, email, profile_pic, role),
         )
-        db.commit()
+        cursor.commit()
+        cursor.close()
